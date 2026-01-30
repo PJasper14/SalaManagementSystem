@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
+import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { fetchNews, type NewsPost } from "@/lib/api";
 import { Calendar } from "lucide-react";
 
@@ -75,23 +76,34 @@ export function NewsList() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {list.map((post) => (
-            <Card key={post.id} variant="default" className="flex flex-col">
-              <div className="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400 mb-2">
-                <Calendar className="h-4 w-4" aria-hidden />
-                {formatDate(post.published_at)}
+            <Card key={post.id} variant="default" className="flex flex-col p-0 overflow-hidden">
+              <div className="relative w-full aspect-video shrink-0">
+                <ImagePlaceholder
+                  src={post.image_url}
+                  alt={post.title}
+                  fill
+                  className="rounded-t-xl"
+                  placeholderClassName="rounded-t-xl"
+                />
               </div>
-              <h2 className="font-semibold text-zinc-900 dark:text-white mb-2 line-clamp-2">
-                {post.title}
-              </h2>
-              <p className="text-zinc-600 dark:text-zinc-400 text-sm flex-1 line-clamp-3">
-                {post.excerpt}
-              </p>
-              <Link
-                href={`/news/${post.slug}`}
-                className="mt-4 text-primary dark:text-primary-light font-medium text-sm hover:underline"
-              >
-                Read more
-              </Link>
+              <div className="p-6 flex flex-col flex-1">
+                <div className="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400 mb-2">
+                  <Calendar className="h-4 w-4 shrink-0" aria-hidden />
+                  {formatDate(post.published_at)}
+                </div>
+                <h2 className="font-semibold text-zinc-900 dark:text-white mb-2 line-clamp-2">
+                  {post.title}
+                </h2>
+                <p className="text-zinc-600 dark:text-zinc-400 text-sm flex-1 line-clamp-3">
+                  {post.excerpt}
+                </p>
+                <Link
+                  href={`/news/${post.slug}`}
+                  className="mt-4 text-primary dark:text-primary-light font-medium text-sm hover:underline"
+                >
+                  Read more
+                </Link>
+              </div>
             </Card>
           ))}
         </div>

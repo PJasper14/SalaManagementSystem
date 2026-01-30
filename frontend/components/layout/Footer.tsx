@@ -1,14 +1,16 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
   { href: "/news", label: "News" },
+  { href: "/emergency", label: "Emergency" },
   { href: "/contact", label: "Contact" },
 ];
 
-const address = "Barangay Sala, City, Philippines";
+const address = "Barangay Sala, Cabuyao, Laguna";
 const copyright = `© ${new Date().getFullYear()} Barangay Sala. All rights reserved.`;
 
 export function Footer() {
@@ -22,9 +24,18 @@ export function Footer() {
           <div>
             <Link
               href="/"
-              className="text-lg font-bold text-primary dark:text-primary-light"
+              className="flex items-center gap-2 text-primary dark:text-primary-light w-fit"
+              aria-label="Barangay Sala - Home"
             >
-              Barangay Sala
+              <Image
+                src="/images/BrgySala_LOGO_NOBG.png"
+                alt="Barangay Sala - Official logo"
+                width={48}
+                height={48}
+                className="h-12 w-12 object-contain"
+                loading="lazy"
+              />
+              <span className="text-lg font-bold">Barangay Sala</span>
             </Link>
             <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400 max-w-xs">
               Serving our community with integrity and dedication.

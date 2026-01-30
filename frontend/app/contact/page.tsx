@@ -28,7 +28,7 @@ export default function ContactPage() {
                   Address
                 </h3>
                 <p className="text-zinc-600 dark:text-zinc-400 text-sm mt-1">
-                  Barangay Sala, City, Philippines
+                  Barangay Sala, Cabuyao, Laguna
                 </p>
               </div>
             </div>

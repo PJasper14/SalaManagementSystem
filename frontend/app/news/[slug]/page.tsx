@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { fetchNewsBySlug, fetchNews } from "@/lib/api";
+import { fetchNewsBySlug } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
+import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { Calendar, ArrowLeft } from "lucide-react";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -49,6 +50,16 @@ export default async function NewsDetailPage({ params }: Props) {
         <ArrowLeft className="h-4 w-4" aria-hidden />
         Back to News
       </Link>
+      <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-8">
+        <ImagePlaceholder
+          src={post.image_url}
+          alt={post.title}
+          fill
+          className="object-cover rounded-xl"
+          placeholderClassName="rounded-xl"
+          sizes="(max-width: 768px) 100vw, 768px"
+        />
+      </div>
       <div className="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400 mb-4">
         <Calendar className="h-4 w-4" aria-hidden />
         {formatDate(post.published_at)}

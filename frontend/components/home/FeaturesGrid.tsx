@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/Card";
-import { FileText, Users, Newspaper, Mail } from "lucide-react";
+import { FileText, Users, Newspaper, Phone, Mail } from "lucide-react";
 
 const features = [
   {
@@ -22,6 +22,13 @@ const features = [
       "Stay updated with the latest news, events, and announcements from the barangay.",
     href: "/news",
     icon: Newspaper,
+  },
+  {
+    title: "Emergency Hotlines",
+    description:
+      "Important contact numbers for PNP, fire, DILG, BHERT, CDRRMO, and more. Save these numbers.",
+    href: "/emergency",
+    icon: Phone,
   },
   {
     title: "Contact",
@@ -49,7 +56,7 @@ export function FeaturesGrid() {
           Quick access to everything you need from Barangay Sala.
         </p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
         {features.map(({ title, description, href, icon: Icon }) => (
           <Card
             key={title}

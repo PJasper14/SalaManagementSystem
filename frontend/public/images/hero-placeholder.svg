@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" fill="none">
+  <defs>
+    <linearGradient id="heroBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#002A8F" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#1E40AF" stop-opacity="0.04"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="400" fill="url(#heroBg)"/>
+  <circle cx="400" cy="200" r="80" fill="#002A8F" fill-opacity="0.06" stroke="#002A8F" stroke-opacity="0.15" stroke-width="2"/>
+  <text x="400" y="195" text-anchor="middle" fill="#002A8F" fill-opacity="0.25" font-family="system-ui, sans-serif" font-size="14" font-weight="600">Barangay Sala</text>
+  <text x="400" y="215" text-anchor="middle" fill="#002A8F" fill-opacity="0.2" font-family="system-ui, sans-serif" font-size="12">Cabuyao, Laguna</text>
+</svg>

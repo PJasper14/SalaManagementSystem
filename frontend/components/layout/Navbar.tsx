@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Menu } from "lucide-react";
 import { useMobileMenu } from "@/hooks/useMobileMenu";
 import { DarkModeToggle } from "@/components/shared/DarkModeToggle";
@@ -12,6 +13,7 @@ const links = [
   { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
   { href: "/news", label: "News" },
+  { href: "/emergency", label: "Emergency" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -28,9 +30,18 @@ export function Navbar() {
           <div className="flex items-center justify-between h-16">
             <Link
               href="/"
-              className="text-xl font-bold text-primary dark:text-primary-light"
+              className="flex items-center gap-2 text-primary dark:text-primary-light focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg"
+              aria-label="Barangay Sala - Home"
             >
-              Barangay Sala
+              <Image
+                src="/images/BrgySala_LOGO_NOBG.png"
+                alt="Barangay Sala - Official logo"
+                width={40}
+                height={40}
+                className="h-10 w-10 object-contain"
+                priority
+              />
+              <span className="text-xl font-bold hidden sm:inline">Barangay Sala</span>
             </Link>
 
             <nav

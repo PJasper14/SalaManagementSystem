@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { X } from "lucide-react";
 import { DarkModeToggle } from "@/components/shared/DarkModeToggle";
 
@@ -9,6 +10,7 @@ const links = [
   { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
   { href: "/news", label: "News" },
+  { href: "/emergency", label: "Emergency" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -34,9 +36,10 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
       />
       <aside className="absolute top-0 right-0 w-full max-w-xs h-full bg-white dark:bg-neutral-900 shadow-xl flex flex-col">
         <div className="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-neutral-800">
-          <span className="font-semibold text-zinc-900 dark:text-white">
-            Menu
-          </span>
+          <Link href="/" onClick={onClose} className="flex items-center gap-2">
+            <Image src="/images/BrgySala_LOGO_NOBG.png" alt="Barangay Sala" width={32} height={32} className="h-8 w-8 object-contain" loading="lazy" />
+            <span className="font-semibold text-zinc-900 dark:text-white">Barangay Sala</span>
+          </Link>
           <button
             type="button"
             onClick={onClose}

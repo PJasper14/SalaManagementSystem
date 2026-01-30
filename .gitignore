@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Env and secrets
+.env
+.env.local
+.env.*.local
+
+# Build and runtime
+frontend/.next/
+frontend/out/
+
+# IDE and OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Logs and cache
+*.log
+npm-debug.log*
+frontend/.turbo/
+
+# Laravel
+backend/storage/*.key
+backend/.phpunit.result.cache

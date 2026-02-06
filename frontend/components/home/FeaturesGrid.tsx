@@ -42,17 +42,17 @@ const features = [
 export function FeaturesGrid() {
   return (
     <section
-      className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-16 md:py-24"
+      className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-16 md:py-24 bg-zinc-50/80"
       aria-labelledby="features-title"
     >
       <div className="text-center mb-12">
         <h2
           id="features-title"
-          className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white mb-2"
+          className="text-2xl md:text-3xl font-bold text-zinc-900 mb-2"
         >
           What we offer
         </h2>
-        <p className="text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
+        <p className="text-zinc-600 max-w-2xl mx-auto">
           Quick access to everything you need from Barangay Sala.
         </p>
       </div>
@@ -65,10 +65,10 @@ export function FeaturesGrid() {
             variant="elevated"
           >
             <div className="flex flex-col gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary dark:bg-primary-light/20 dark:text-primary-light">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary border border-primary/20">
                 <Icon className="h-5 w-5" aria-hidden />
               </div>
-              <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">
+              <p className="text-zinc-600 text-sm leading-relaxed">
                 {description}
               </p>
             </div>

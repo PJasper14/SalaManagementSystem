@@ -25,7 +25,7 @@ Edit `.env.local`:
 
 - `app/` — App Router pages and layout
 - `components/` — Layout, UI, home, forms, shared
-- `lib/` — API client, theme, utils
-- `hooks/` — useTheme, useMobileMenu
+- `lib/` — API client, utils
+- `hooks/` — useMobileMenu
 
 See project root `PROJECT_BLUEPRINT.md` and `DESIGN_SYSTEM.md` for details.

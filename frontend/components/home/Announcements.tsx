@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { fetchNews, type NewsPost } from "@/lib/api";
-import { Calendar } from "lucide-react";
+import { Calendar, WifiOff } from "lucide-react";
 
 const fallback: NewsPost[] = [
   {
@@ -58,19 +58,26 @@ function formatDate(s: string) {
 export function Announcements() {
   const [posts, setPosts] = useState<NewsPost[]>(fallback);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  useEffect(() => {
+  const load = useCallback(() => {
+    setLoading(true);
+    setError(false);
     fetchNews(1)
       .then((r) => setPosts(r.data.slice(0, 3)))
-      .catch(() => {})
+      .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
 
   const list = posts.length ? posts : fallback;
 
   return (
     <section
-      className="bg-zinc-100 dark:bg-neutral-900/50 py-16 md:py-24"
+      className="bg-zinc-100 py-16 md:py-24 border-t border-zinc-200/80"
       aria-labelledby="announcements-title"
     >
       <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
@@ -78,11 +85,11 @@ export function Announcements() {
           <div>
             <h2
               id="announcements-title"
-              className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white"
+              className="text-2xl md:text-3xl font-bold text-zinc-900"
             >
               News & Announcements
             </h2>
-            <p className="text-zinc-600 dark:text-zinc-400 mt-1">
+            <p className="text-zinc-600 mt-1">
               Latest updates from Barangay Sala
             </p>
           </div>
@@ -93,16 +100,46 @@ export function Announcements() {
           </Link>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {loading
-            ? Array.from({ length: 3 }).map((_, i) => (
+          {error ? (
+            <div
+              className="md:col-span-3 rounded-xl border border-zinc-200 bg-white p-8 text-center"
+              role="alert"
+            >
+              <WifiOff className="h-10 w-10 mx-auto text-zinc-400 mb-3" aria-hidden />
+              <p className="text-zinc-700 text-sm mb-2">
+                Can&apos;t load announcements. Check your connection and try again.
+              </p>
+              <p className="text-zinc-500 text-xs mb-4">
+                If you&apos;re running locally, make sure the API server is started (e.g. <code className="bg-zinc-100 px-1 rounded">php artisan serve</code> in the backend folder).
+              </p>
+              <Button type="button" variant="outline" size="sm" onClick={load} disabled={loading}>
+                Retry
+              </Button>
+            </div>
+          ) : loading ? (
+            Array.from({ length: 3 }).map((_, i) => (
                 <div
                   key={i}
-                  className="rounded-xl bg-white dark:bg-neutral-900 border border-zinc-200 dark:border-neutral-800 p-6 animate-pulse h-48"
+                  className="rounded-xl bg-white border border-zinc-200 overflow-hidden animate-pulse"
                   aria-hidden
-                />
+                >
+                  <div className="w-full aspect-video bg-zinc-200" />
+                  <div className="p-6 space-y-3">
+                    <div className="h-4 w-24 bg-zinc-200 rounded" />
+                    <div className="h-5 w-full bg-zinc-200 rounded" />
+                    <div className="h-4 w-full bg-zinc-200 rounded" />
+                    <div className="h-4 w-3/4 bg-zinc-200 rounded" />
+                  </div>
+                </div>
               ))
-            : list.map((post) => (
-                <Card key={post.id} variant="default" className="flex flex-col p-0 overflow-hidden">
+          ) : (
+            list.map((post, index) => (
+                <Card
+                  key={post.id}
+                  variant="default"
+                  className="flex flex-col p-0 overflow-hidden animate-stagger-item"
+                  style={{ animationDelay: `${index * 0.1}s`, opacity: 0 }}
+                >
                   <div className="relative w-full aspect-video shrink-0">
                     <ImagePlaceholder
                       src={post.image_url}
@@ -113,25 +150,26 @@ export function Announcements() {
                     />
                   </div>
                   <div className="p-6 flex flex-col flex-1">
-                    <div className="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400 mb-2">
+                    <div className="flex items-center gap-2 text-sm text-zinc-500 mb-2">
                       <Calendar className="h-4 w-4 shrink-0" aria-hidden />
                       {formatDate(post.published_at)}
                     </div>
-                    <h3 className="font-semibold text-zinc-900 dark:text-white mb-2 line-clamp-2">
+                    <h3 className="font-semibold text-zinc-900 mb-2 line-clamp-2">
                       {post.title}
                     </h3>
-                    <p className="text-zinc-600 dark:text-zinc-400 text-sm flex-1 line-clamp-3">
+                    <p className="text-zinc-600 text-sm flex-1 line-clamp-3">
                       {post.excerpt}
                     </p>
                     <Link
                       href={`/news/${post.slug}`}
-                      className="mt-4 text-primary dark:text-primary-light font-medium text-sm hover:underline"
+                      className="mt-4 text-primary font-medium text-sm hover:underline"
                     >
                       Read more
                     </Link>
                   </div>
                 </Card>
-              ))}
+              ))
+          )}
         </div>
       </div>
     </section>

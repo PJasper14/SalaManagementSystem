@@ -6,7 +6,9 @@ import { Input } from "@/components/ui/Input";
 import {
   submitServiceRequest,
   type ServiceRequestPayload,
+  ApiError,
 } from "@/lib/api";
+import { CheckCircle2 } from "lucide-react";
 
 const SERVICE_TYPES = [
   "Barangay Clearance",
@@ -39,6 +41,7 @@ function validate(d: ServiceRequestPayload): Errors {
 export function ServiceRequestForm() {
   const [data, setData] = useState<ServiceRequestPayload>(initial);
   const [errors, setErrors] = useState<Errors>({});
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
     "idle"
   );
@@ -48,6 +51,7 @@ export function ServiceRequestForm() {
   ) => {
     setData((prev) => ({ ...prev, [k]: e.target.value }));
     if (errors[k]) setErrors((prev) => ({ ...prev, [k]: undefined }));
+    if (errorMessage) setErrorMessage(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -55,17 +59,34 @@ export function ServiceRequestForm() {
     const err = validate(data);
     if (Object.keys(err).length) {
       setErrors(err);
+      setErrorMessage(null);
       return;
     }
     setErrors({});
+    setErrorMessage(null);
     setStatus("loading");
     try {
       await submitServiceRequest(data);
       setStatus("success");
       setData(initial);
-    } catch {
+    } catch (raw) {
       setStatus("error");
+      if (raw instanceof ApiError) {
+        setErrorMessage(raw.message);
+        if (raw.errors && Object.keys(raw.errors).length) {
+          setErrors((prev) => ({ ...prev, ...raw.errors }));
+        }
+      } else {
+        setErrorMessage("Something went wrong. Please try again or visit us in person.");
+      }
     }
+  };
+
+  const handleClear = () => {
+    setData(initial);
+    setErrors({});
+    setErrorMessage(null);
+    setStatus("idle");
   };
 
   return (
@@ -73,7 +94,7 @@ export function ServiceRequestForm() {
       <div className="space-y-1">
         <label
           htmlFor="service_type"
-          className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+          className="block text-sm font-medium text-zinc-700"
         >
           Service type
         </label>
@@ -81,7 +102,7 @@ export function ServiceRequestForm() {
           id="service_type"
           value={data.service_type}
           onChange={handleChange("service_type")}
-          className="w-full rounded-lg border border-zinc-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-3 text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-primary focus:border-primary"
+          className="w-full rounded-lg border border-zinc-300 bg-white px-4 py-3 text-zinc-900 focus:ring-2 focus:ring-primary focus:border-primary min-h-[44px]"
           aria-invalid={!!errors.service_type}
         >
           <option value="">Select a service</option>
@@ -92,7 +113,7 @@ export function ServiceRequestForm() {
           ))}
         </select>
         {errors.service_type && (
-          <p className="text-sm text-red-500 dark:text-red-400" role="alert">
+          <p className="text-sm text-red-500" role="alert">
             {errors.service_type}
           </p>
         )}
@@ -113,6 +134,7 @@ export function ServiceRequestForm() {
         error={errors.requester_email}
         placeholder="you@example.com"
         required
+        helperText="We'll reply to this email."
       />
       <Input
         label="Details"
@@ -124,23 +146,41 @@ export function ServiceRequestForm() {
         required
       />
       {status === "success" && (
-        <p className="text-sm text-green-600 dark:text-green-400" role="status">
-          Request submitted. We&apos;ll get back to you soon.
+        <div
+          className="flex items-center gap-2 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-green-700"
+          role="status"
+          aria-live="polite"
+        >
+          <CheckCircle2 className="h-5 w-5 shrink-0 text-green-600" aria-hidden />
+          <p className="text-sm font-medium">
+            Request submitted. We&apos;ll get back to you soon.
+          </p>
+        </div>
+      )}
+      {status === "error" && errorMessage && (
+        <p className="text-sm text-red-500" role="alert">
+          {errorMessage}
         </p>
       )}
-      {status === "error" && (
-        <p className="text-sm text-red-500 dark:text-red-400" role="alert">
-          Something went wrong. Please try again or visit us in person.
-        </p>
-      )}
-      <Button
-        type="submit"
-        variant="primary"
-        size="md"
-        disabled={status === "loading"}
-      >
-        {status === "loading" ? "Submitting…" : "Submit request"}
-      </Button>
+      <div className="flex flex-wrap gap-3">
+        <Button
+          type="submit"
+          variant="primary"
+          size="md"
+          disabled={status === "loading"}
+        >
+          {status === "loading" ? "Submitting…" : "Submit request"}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          size="md"
+          onClick={handleClear}
+          disabled={status === "loading"}
+        >
+          Clear
+        </Button>
+      </div>
     </form>
   );
 }

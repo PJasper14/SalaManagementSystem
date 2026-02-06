@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { submitContact, type ContactPayload } from "@/lib/api";
+import { submitContact, type ContactPayload, ApiError } from "@/lib/api";
+import { CheckCircle2 } from "lucide-react";
 
 const initial: ContactPayload = {
   name: "",
@@ -25,18 +26,39 @@ function validate(d: ContactPayload): Errors {
   return e;
 }
 
+function isDirty(data: ContactPayload): boolean {
+  return (
+    data.name !== initial.name ||
+    data.email !== initial.email ||
+    data.subject !== initial.subject ||
+    data.message !== initial.message
+  );
+}
+
 export function ContactForm() {
   const [data, setData] = useState<ContactPayload>(initial);
   const [errors, setErrors] = useState<Errors>({});
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
     "idle"
   );
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isDirty(data) && status !== "success") {
+        e.preventDefault();
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [data, status]);
 
   const handleChange = (k: keyof ContactPayload) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setData((prev) => ({ ...prev, [k]: e.target.value }));
     if (errors[k]) setErrors((prev) => ({ ...prev, [k]: undefined }));
+    if (errorMessage) setErrorMessage(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -44,17 +66,34 @@ export function ContactForm() {
     const err = validate(data);
     if (Object.keys(err).length) {
       setErrors(err);
+      setErrorMessage(null);
       return;
     }
     setErrors({});
+    setErrorMessage(null);
     setStatus("loading");
     try {
       await submitContact(data);
       setStatus("success");
       setData(initial);
-    } catch {
+    } catch (raw) {
       setStatus("error");
+      if (raw instanceof ApiError) {
+        setErrorMessage(raw.message);
+        if (raw.errors && Object.keys(raw.errors).length) {
+          setErrors((prev) => ({ ...prev, ...raw.errors }));
+        }
+      } else {
+        setErrorMessage("Something went wrong. Please try again or contact us directly.");
+      }
     }
+  };
+
+  const handleClear = () => {
+    setData(initial);
+    setErrors({});
+    setErrorMessage(null);
+    setStatus("idle");
   };
 
   return (
@@ -75,6 +114,7 @@ export function ContactForm() {
         error={errors.email}
         placeholder="you@example.com"
         required
+        helperText="We'll reply to this email."
       />
       <Input
         label="Subject"
@@ -94,23 +134,41 @@ export function ContactForm() {
         required
       />
       {status === "success" && (
-        <p className="text-sm text-green-600 dark:text-green-400" role="status">
-          Thank you! Your message has been sent.
+        <div
+          className="flex items-center gap-2 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-green-700"
+          role="status"
+          aria-live="polite"
+        >
+          <CheckCircle2 className="h-5 w-5 shrink-0 text-green-600" aria-hidden />
+          <p className="text-sm font-medium">
+            Thank you! Your message has been sent.
+          </p>
+        </div>
+      )}
+      {status === "error" && errorMessage && (
+        <p className="text-sm text-red-500" role="alert">
+          {errorMessage}
         </p>
       )}
-      {status === "error" && (
-        <p className="text-sm text-red-500 dark:text-red-400" role="alert">
-          Something went wrong. Please try again or contact us directly.
-        </p>
-      )}
-      <Button
-        type="submit"
-        variant="primary"
-        size="md"
-        disabled={status === "loading"}
-      >
-        {status === "loading" ? "Sending…" : "Send message"}
-      </Button>
+      <div className="flex flex-wrap gap-3">
+        <Button
+          type="submit"
+          variant="primary"
+          size="md"
+          disabled={status === "loading"}
+        >
+          {status === "loading" ? "Sending…" : "Send message"}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          size="md"
+          onClick={handleClear}
+          disabled={status === "loading" || !isDirty(data)}
+        >
+          Clear
+        </Button>
+      </div>
     </form>
   );
 }

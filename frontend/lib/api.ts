@@ -1,5 +1,17 @@
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
+/** API error with optional validation errors (422). */
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    public status: number,
+    public errors?: Record<string, string>
+  ) {
+    super(message);
+    this.name = "ApiError";
+  }
+}
+
 export async function fetchApi<T>(
   path: string,
   init?: RequestInit
@@ -12,11 +24,25 @@ export async function fetchApi<T>(
       ...init?.headers,
     },
   });
+  const body = await res.json().catch(() => ({}));
+
   if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error((err as { message?: string }).message || res.statusText);
+    const err = body as { message?: string; errors?: Record<string, string[]> };
+    const message = err.message || res.statusText || "Something went wrong.";
+
+    if (res.status === 422 && err.errors && typeof err.errors === "object") {
+      const flat: Record<string, string> = {};
+      for (const [field, messages] of Object.entries(err.errors)) {
+        const arr = Array.isArray(messages) ? messages : [String(messages)];
+        flat[field] = arr[0] ?? message;
+      }
+      throw new ApiError(message, 422, flat);
+    }
+
+    throw new ApiError(message, res.status);
   }
-  return res.json() as Promise<T>;
+
+  return body as T;
 }
 
 export interface ContactPayload {

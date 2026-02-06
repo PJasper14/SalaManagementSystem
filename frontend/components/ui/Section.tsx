@@ -27,12 +27,12 @@ export function Section({
         {(title || subtitle) && (
           <div className="space-y-2">
             {title && (
-              <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">
+              <h2 className="text-2xl md:text-3xl font-bold text-zinc-900">
                 {title}
               </h2>
             )}
             {subtitle && (
-              <p className="text-zinc-600 dark:text-zinc-400 text-lg max-w-2xl">
+              <p className="text-zinc-600 text-lg max-w-2xl">
                 {subtitle}
               </p>
             )}

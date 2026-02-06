@@ -3,6 +3,10 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
+/** Tiny blur placeholder (10x10 gray) for Next.js placeholder="blur". */
+const BLUR_DATA_URL =
+  "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAAIAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIhAAAgEDBAMBAAAAAAAAAAAAAQIDAAQRBRIhMQYTQVFh/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAZEQACAwEAAAAAAAAAAAAAAAABAgADESH/2gAMAwEAAhEDEQA/ALnY22O2tv/Z";
+
 interface ImagePlaceholderProps {
   src: string | null | undefined;
   alt: string;
@@ -14,7 +18,7 @@ interface ImagePlaceholderProps {
   sizes?: string;
 }
 
-/** Renders image when src is valid; otherwise shows a placeholder. */
+/** Renders image when src is valid; otherwise shows a placeholder. Uses blur placeholder when loading. */
 export function ImagePlaceholder({
   src,
   alt,
@@ -38,6 +42,8 @@ export function ImagePlaceholder({
         className={cn("object-cover", className)}
         sizes={sizes}
         loading="lazy"
+        placeholder="blur"
+        blurDataURL={BLUR_DATA_URL}
       />
     ) : (
       <Image
@@ -48,6 +54,8 @@ export function ImagePlaceholder({
         className={cn("object-cover", className)}
         sizes={sizes}
         loading="lazy"
+        placeholder="blur"
+        blurDataURL={BLUR_DATA_URL}
       />
     );
   }
@@ -55,7 +63,7 @@ export function ImagePlaceholder({
   return (
     <div
       className={cn(
-        "relative flex items-center justify-center bg-zinc-100 dark:bg-zinc-800 overflow-hidden",
+        "relative flex items-center justify-center bg-zinc-100  border border-zinc-200  overflow-hidden",
         fill ? "absolute inset-0" : "w-full",
         placeholderClassName,
         className

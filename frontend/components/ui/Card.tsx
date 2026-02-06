@@ -5,10 +5,11 @@ type Variant = "default" | "elevated" | "bordered";
 
 const variants: Record<Variant, string> = {
   default:
-    "bg-white dark:bg-neutral-900 border border-zinc-200 dark:border-neutral-800",
-  elevated: "bg-white dark:bg-neutral-900 shadow-md hover:shadow-card-hover",
+    "bg-white  border border-zinc-200 ",
+  elevated:
+    "bg-white  border border-zinc-200  shadow-md hover:shadow-card-hover hover:scale-[1.01] motion-reduce:hover:scale-100 transition-all duration-200",
   bordered:
-    "bg-white dark:bg-neutral-900 border-2 border-zinc-200 dark:border-neutral-700",
+    "bg-white  border-2 border-zinc-200 ",
 };
 
 interface CardProps {
@@ -16,7 +17,9 @@ interface CardProps {
   children: React.ReactNode;
   variant?: Variant;
   href?: string;
+  id?: string;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export function Card({
@@ -24,7 +27,9 @@ export function Card({
   children,
   variant = "default",
   href,
+  id,
   className,
+  style,
 }: CardProps) {
   const base =
     "rounded-xl p-6 md:p-8 transition-shadow " + variants[variant];
@@ -34,7 +39,7 @@ export function Card({
   const content = (
     <>
       {title && (
-        <h3 className="text-lg font-semibold text-zinc-900 dark:text-white mb-3">
+        <h3 className="text-lg font-semibold text-zinc-900 mb-3">
           {title}
         </h3>
       )}
@@ -44,11 +49,15 @@ export function Card({
 
   if (href) {
     return (
-      <Link href={href} className={classes}>
+      <Link href={href} id={id} className={classes} style={style}>
         {content}
       </Link>
     );
   }
 
-  return <article className={classes}>{content}</article>;
+  return (
+    <article id={id} className={classes} style={style}>
+      {content}
+    </article>
+  );
 }

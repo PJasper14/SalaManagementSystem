@@ -19,7 +19,7 @@ export function FAQAccordion({ items, className }: FAQAccordionProps) {
 
   return (
     <div
-      className={cn("space-y-0 border border-zinc-200 dark:border-neutral-800 rounded-xl overflow-hidden", className)}
+      className={cn("space-y-0 border border-zinc-200  rounded-xl overflow-hidden", className)}
       role="region"
       aria-label="FAQ"
     >
@@ -28,12 +28,12 @@ export function FAQAccordion({ items, className }: FAQAccordionProps) {
         return (
           <div
             key={i}
-            className="border-b border-zinc-200 dark:border-neutral-800 last:border-b-0"
+            className="border-b border-zinc-200 last:border-b-0"
           >
             <button
               type="button"
               onClick={() => setOpenIndex(isOpen ? null : i)}
-              className="flex w-full justify-between items-center gap-4 py-4 px-5 text-left font-medium text-zinc-900 dark:text-white hover:bg-zinc-50 dark:hover:bg-neutral-800/50 transition-colors"
+              className="flex w-full justify-between items-center gap-4 py-4 px-5 text-left font-medium text-zinc-900 hover:bg-zinc-50 transition-colors"
               aria-expanded={isOpen}
               aria-controls={`faq-panel-${i}`}
               id={`faq-trigger-${i}`}
@@ -56,7 +56,7 @@ export function FAQAccordion({ items, className }: FAQAccordionProps) {
                 isOpen ? "max-h-96" : "max-h-0"
               )}
             >
-              <div className="px-5 pb-4 pt-0 text-zinc-600 dark:text-zinc-400">
+              <div className="px-5 pb-4 pt-0 text-zinc-600">
                 {item.answer}
               </div>
             </div>

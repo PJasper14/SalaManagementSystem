@@ -25,17 +25,17 @@ const testimonials = [
 export function Testimonials() {
   return (
     <section
-      className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-16 md:py-24"
+      className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-16 md:py-24 border-t border-zinc-200/80"
       aria-labelledby="testimonials-title"
     >
       <div className="text-center mb-12">
         <h2
           id="testimonials-title"
-          className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white mb-2"
+          className="text-2xl md:text-3xl font-bold text-zinc-900 mb-2"
         >
           What residents say
         </h2>
-        <p className="text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
+        <p className="text-zinc-600 max-w-2xl mx-auto">
           Feedback from our community.
         </p>
       </div>
@@ -43,17 +43,17 @@ export function Testimonials() {
         {testimonials.map(({ quote, author, role }, i) => (
           <Card key={i} variant="bordered">
             <Quote
-              className="h-8 w-8 text-primary/40 dark:text-primary-light/40 mb-3"
+              className="h-8 w-8 text-primary/40 mb-3"
               aria-hidden
             />
-            <p className="text-zinc-700 dark:text-zinc-300 italic mb-4">
+            <p className="text-zinc-700 italic mb-4">
               &ldquo;{quote}&rdquo;
             </p>
             <div>
-              <p className="font-semibold text-zinc-900 dark:text-white">
+              <p className="font-semibold text-zinc-900">
                 {author}
               </p>
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">{role}</p>
+              <p className="text-sm text-zinc-500">{role}</p>
             </div>
           </Card>
         ))}

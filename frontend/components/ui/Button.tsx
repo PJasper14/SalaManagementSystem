@@ -8,19 +8,19 @@ type Size = "sm" | "md" | "lg";
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-primary text-white hover:bg-primary/90 dark:bg-primary-light dark:hover:bg-primary-light/90",
+    "bg-primary text-white hover:bg-primary/90  ",
   secondary:
-    "bg-secondary text-white hover:bg-secondary/90 dark:bg-secondary-light dark:hover:bg-secondary-light/90",
+    "bg-secondary text-white hover:bg-secondary/90  ",
   outline:
-    "border-2 border-primary text-primary hover:bg-primary hover:text-white dark:border-primary-light dark:text-primary-light dark:hover:bg-primary-light dark:hover:text-white",
+    "border-2 border-primary text-primary hover:bg-primary hover:text-white    ",
   ghost:
-    "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800",
+    "text-zinc-700  hover:bg-zinc-100 ",
 };
 
 const sizes: Record<Size, string> = {
-  sm: "h-9 px-4 text-sm",
-  md: "h-11 px-6 text-base",
-  lg: "h-12 px-8 text-lg",
+  sm: "min-h-[44px] min-w-[44px] h-9 px-4 py-2.5 text-sm",
+  md: "min-h-[44px] min-w-[44px] h-11 px-6 text-base",
+  lg: "min-h-[44px] min-w-[44px] h-12 px-8 text-lg",
 };
 
 interface ButtonProps
@@ -41,7 +41,7 @@ export function Button({
   ...rest
 }: ButtonProps) {
   const base =
-    "inline-flex items-center justify-center font-semibold rounded-lg transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none";
+    "inline-flex items-center justify-center font-semibold rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none";
 
   const classes = cn(base, variants[variant], sizes[size], className);
 

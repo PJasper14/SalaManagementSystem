@@ -76,6 +76,7 @@ Create a MySQL database (e.g. `sala_db`) and set `DB_DATABASE`, `DB_USERNAME`, `
 - **Backend setup:** [backend/README-SALA.md](./backend/README-SALA.md)
 - **Launch checklist (SEO, performance, a11y):** [LAUNCH_CHECKLIST.md](./LAUNCH_CHECKLIST.md)
 - **Debugging & common errors:** [DEBUGGING.md](./DEBUGGING.md)
+- **Improvement ideas (prioritized):** [IMPROVEMENTS.md](./IMPROVEMENTS.md)
 
 ## Tech stack
 
